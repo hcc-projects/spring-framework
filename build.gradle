@@ -290,12 +290,35 @@ configure(allprojects) { project ->
 			cacheChangingModulesFor 0, "seconds"
 		}
 		repositories {
+			maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
+			maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter' }
 			mavenCentral()
-			maven { url "https://repo.spring.io/libs-spring-framework-build" }
+//			maven { url "https://repo.spring.io/libs-spring-framework-build" }
 		}
 	}
 	configurations.all {
 		resolutionStrategy {
+			failOnVersionConflict()
+			force 'net.bytebuddy:byte-buddy:1.10.18'
+			force 'net.bytebuddy:byte-buddy-agent:1.10.18'
+			force 'org.jboss.logging:jboss-logging:3.4.1.Final'
+			force 'org.objenesis:objenesis:3.1'
+			force 'org.springframework:spring-beans:5.3.6-SNAPSHOT'
+			force 'org.springframework:spring-core:5.3.6-SNAPSHOT'
+			force 'org.springframework:spring-tx:5.3.6-SNAPSHOT'
+			force 'org.apache.httpcomponents.core5:httpcore5:5.0.3'
+			force 'org.wildfly.common:wildfly-common:1.5.2.Final'
+			force 'org.jboss.threads:jboss-threads:3.1.0.Final'
+			force 'org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.4.31'
+			force 'com.puppycrawl.tools:checkstyle:8.22'
+			force 'commons-codec:commons-codec:1.13'
+			force 'org.apache.httpcomponents:httpcore:4.4.13'
+			force 'org.codehaus.woodstox:stax2-api:4.2.1'
+			force 'com.google.guava:guava:12.0.1'
+			force 'commons-collections:commons-collections:3.2.1'
+			force 'com.squareup.okio:okio:1.17.2'
+
+
 			cacheChangingModulesFor 0, "seconds"
 			cacheDynamicVersionsFor 0, "seconds"
 		}

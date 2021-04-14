@@ -89,20 +89,26 @@ import org.springframework.util.StringUtils;
  * Spring's default implementation of the {@link ConfigurableListableBeanFactory}
  * and {@link BeanDefinitionRegistry} interfaces: a full-fledged bean factory
  * based on bean definition metadata, extensible through post-processors.
+ * Spring中ConfigurableListableBeanFactory和BeanDefinitionRegistry的默认实现：
+ * 一个成熟的bean工厂，基于bean定义元数据，可通过后置处理器扩展
  *
  * <p>Typical usage is registering all bean definitions first (possibly read
  * from a bean definition file), before accessing beans. Bean lookup by name
  * is therefore an inexpensive operation in a local bean definition table,
  * operating on pre-resolved bean definition metadata objects.
+ * 通常使用是首先注册所有的bean定义(可能从一个bean定义文件中读取)，在访问bean之前。
+ * 因此在本地bean定义表中根据名称查找bean是一个廉价的操作，操作预先解析的bean定义元数据对象
  *
  * <p>Note that readers for specific bean definition formats are typically
  * implemented separately rather than as bean factory subclasses: see for example
  * {@link org.springframework.beans.factory.xml.XmlBeanDefinitionReader}.
+ * 请注意，特定bean定义格式的阅读器通常是单独实现，而不是作为bean工厂的子类。比如XmlBeanDefinitionReader
  *
  * <p>For an alternative implementation of the
  * {@link org.springframework.beans.factory.ListableBeanFactory} interface,
  * have a look at {@link StaticListableBeanFactory}, which manages existing
  * bean instances rather than creating new ones based on bean definitions.
+ * ListableBeanFactory接口的替代实现，看看StaticListableBeanFactory，管理存在的bean实例而不是依据bean定义创建新的
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -137,17 +143,21 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 
 	/** Map from serialized id to factory instance. */
+	//从序列化id映射到工厂实例  serialized id即为主函数
 	private static final Map<String, Reference<DefaultListableBeanFactory>> serializableFactories =
 			new ConcurrentHashMap<>(8);
 
 	/** Optional id for this factory, for serialization purposes. */
+	//此工厂的可选id，主要是为了序列化作用
 	@Nullable
 	private String serializationId;
 
 	/** Whether to allow re-registration of a different definition with the same name. */
+	//是否允许相同的名称的不同定义重新注册
 	private boolean allowBeanDefinitionOverriding = true;
 
 	/** Whether to allow eager class loading even for lazy-init beans. */
+	//是否允许甚至对懒加载的bean都进行急切的类加载
 	private boolean allowEagerClassLoading = true;
 
 	/** Optional OrderComparator for dependency Lists and arrays. */
