@@ -41,13 +41,17 @@ import org.springframework.util.StringUtils;
 
 /**
  * General purpose factory loading mechanism for internal use within the framework.
+ * 通用的工厂加载机制为框架内部使用
  *
  * <p>{@code SpringFactoriesLoader} {@linkplain #loadFactories loads} and instantiates
  * factories of a given type from {@value #FACTORIES_RESOURCE_LOCATION} files which
  * may be present in multiple JAR files in the classpath. The {@code spring.factories}
  * file must be in {@link Properties} format, where the key is the fully qualified
  * name of the interface or abstract class, and the value is a comma-separated list of
- * implementation class names. For example:
+ * implementation class names.
+ * SpringFactoriesLoader通过给定的类型加载和实例化工厂从META-INF/spring.factories文件中，这个文件可能存在多个jar文件中。
+ * spring.factories文件必须是Properties格式，key是完全限定的抽象接口名，value是这些类的实现类集合
+ * For example:
  *
  * <pre class="code">example.MyService=example.MyServiceImpl1,example.MyServiceImpl2</pre>
  *
@@ -64,6 +68,8 @@ public final class SpringFactoriesLoader {
 	/**
 	 * The location to look for factories.
 	 * <p>Can be present in multiple JAR files.
+	 * 查找工厂的位置
+	 * 可以存在多个jar文件中
 	 */
 	public static final String FACTORIES_RESOURCE_LOCATION = "META-INF/spring.factories";
 
@@ -80,12 +86,16 @@ public final class SpringFactoriesLoader {
 	/**
 	 * Load and instantiate the factory implementations of the given type from
 	 * {@value #FACTORIES_RESOURCE_LOCATION}, using the given class loader.
+	 * 使用给定的类加载器，从META-INF/spring.factories中加载并实例化给定类型的工厂实现
 	 * <p>The returned factories are sorted through {@link AnnotationAwareOrderComparator}.
 	 * <p>If a custom instantiation strategy is required, use {@link #loadFactoryNames}
 	 * to obtain all registered factory names.
+	 * 返回的工厂通过AnnotationAwareOrderComparator排序。如果需要自定义实例化策略，使用loadFactoryNames取获取所有已经注册的工厂名字
+	 *
 	 * <p>As of Spring Framework 5.3, if duplicate implementation class names are
 	 * discovered for a given factory type, only one instance of the duplicated
 	 * implementation type will be instantiated.
+	 * 从spring5.3开始，如果通过给定的工厂类型发现有重复的实现类名，只有一个重复的实现类会被实例化
 	 * @param factoryType the interface or abstract class representing the factory
 	 * @param classLoader the ClassLoader to use for loading (can be {@code null} to use the default)
 	 * @throws IllegalArgumentException if any factory implementation class cannot
@@ -114,9 +124,11 @@ public final class SpringFactoriesLoader {
 	 * Load the fully qualified class names of factory implementations of the
 	 * given type from {@value #FACTORIES_RESOURCE_LOCATION}, using the given
 	 * class loader.
+	 * 通过给定的类加载器从META-INF/spring.factories中加载给定类型的全限定名的实现类
 	 * <p>As of Spring Framework 5.3, if a particular implementation class name
 	 * is discovered more than once for the given factory type, duplicates will
 	 * be ignored.
+	 * 从spring5.3开始，如果一个特殊的实现类名被发现多于给定的工厂类型不止一次，重复的将被忽略
 	 * @param factoryType the interface or abstract class representing the factory
 	 * @param classLoader the ClassLoader to use for loading resources; can be
 	 * {@code null} to use the default
@@ -133,6 +145,7 @@ public final class SpringFactoriesLoader {
 	}
 
 	private static Map<String, List<String>> loadSpringFactories(ClassLoader classLoader) {
+		//先从缓存中加载 如果存在则直接返回 不存在则进行加载
 		Map<String, List<String>> result = cache.get(classLoader);
 		if (result != null) {
 			return result;
@@ -140,11 +153,14 @@ public final class SpringFactoriesLoader {
 
 		result = new HashMap<>();
 		try {
+			//从classpath中找到所有的META-INF/spring.factories
 			Enumeration<URL> urls = classLoader.getResources(FACTORIES_RESOURCE_LOCATION);
 			while (urls.hasMoreElements()) {
 				URL url = urls.nextElement();
 				UrlResource resource = new UrlResource(url);
+				//将每个META-INF/spring.factories加载成配置
 				Properties properties = PropertiesLoaderUtils.loadProperties(resource);
+				//将配置转换成map key为抽象类接口  value为实现类集合
 				for (Map.Entry<?, ?> entry : properties.entrySet()) {
 					String factoryTypeName = ((String) entry.getKey()).trim();
 					String[] factoryImplementationNames =
@@ -157,6 +173,7 @@ public final class SpringFactoriesLoader {
 			}
 
 			// Replace all lists with unmodifiable lists containing unique elements
+			//将所有列表替换为包含唯一元素的不可修改列表
 			result.replaceAll((factoryType, implementations) -> implementations.stream().distinct()
 					.collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList)));
 			cache.put(classLoader, result);
@@ -168,6 +185,7 @@ public final class SpringFactoriesLoader {
 		return result;
 	}
 
+	//实例化工厂类
 	@SuppressWarnings("unchecked")
 	private static <T> T instantiateFactory(String factoryImplementationName, Class<T> factoryType, ClassLoader classLoader) {
 		try {
