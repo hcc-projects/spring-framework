@@ -25,10 +25,12 @@ import org.springframework.lang.Nullable;
  * Interface to be implemented by types that determine which @{@link Configuration}
  * class(es) should be imported based on a given selection criteria, usually one or
  * more annotation attributes.
+ * 根据类型决定的接口，这些类型根据给定的选择标准（通常一个或多个注解属性）来确定哪个配置类应该被导入，
  *
  * <p>An {@link ImportSelector} may implement any of the following
  * {@link org.springframework.beans.factory.Aware Aware} interfaces,
  * and their respective methods will be called prior to {@link #selectImports}:
+ * 一个ImportSelector可能实现以下任何Aware接口，且他们各自的接口将被selectImports之前被调用
  * <ul>
  * <li>{@link org.springframework.context.EnvironmentAware EnvironmentAware}</li>
  * <li>{@link org.springframework.beans.factory.BeanFactoryAware BeanFactoryAware}</li>
@@ -38,6 +40,7 @@ import org.springframework.lang.Nullable;
  *
  * <p>Alternatively, the class may provide a single constructor with one or more of
  * the following supported parameter types:
+ * 或者，该类可以为单个构造函数提供以下一种或多个支持的参数类型
  * <ul>
  * <li>{@link org.springframework.core.env.Environment Environment}</li>
  * <li>{@link org.springframework.beans.factory.BeanFactory BeanFactory}</li>
@@ -49,6 +52,7 @@ import org.springframework.lang.Nullable;
  * as regular {@code @Import} annotations, however, it is also possible to defer
  * selection of imports until all {@code @Configuration} classes have been processed
  * (see {@link DeferredImportSelector} for details).
+ * ImportSelector的实现类通常处理同常规的@Import注解。但是，他也可能推迟导入的选择直到所有配置类被处理
  *
  * @author Chris Beams
  * @author Juergen Hoeller
@@ -63,6 +67,7 @@ public interface ImportSelector {
 	/**
 	 * Select and return the names of which class(es) should be imported based on
 	 * the {@link AnnotationMetadata} of the importing @{@link Configuration} class.
+	 * 选择并且返回应该基于哪个类导入的名称导入配置类元数据
 	 * @return the class names, or an empty array if none
 	 */
 	String[] selectImports(AnnotationMetadata importingClassMetadata);
@@ -73,6 +78,8 @@ public interface ImportSelector {
 	 * <p>If this predicate returns {@code true} for a given fully-qualified
 	 * class name, said class will not be considered as an imported configuration
 	 * class, bypassing class file loading as well as metadata introspection.
+	 * 返回从导入候选项中排除类的谓词，该谓词可传递的应用于通过此选择器找到的所有类。
+	 * 如果这个谓词为给定的完全限定的类名返回true，则该类将不被视为导入的配置类，从而绕过了类文件的加载以及元数据的内省
 	 * @return the filter predicate for fully-qualified candidate class names
 	 * of transitively imported configuration classes, or {@code null} if none
 	 * @since 5.2.4
