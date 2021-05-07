@@ -21,6 +21,9 @@ package org.springframework.core.metrics;
  * <p>The core container and its infrastructure components can use the {@code ApplicationStartup}
  * to mark steps during the application startup and collect data about the execution context
  * or their processing time.
+ * 使用StartupStep来检测应用程序启动阶段。
+ * 核心容器和他的基础设置组件可以使用ApplicationStartup在应用启动期间标记步骤并收集执行上下文的数据或其处理时间
+ *
  *
  * @author Brian Clozel
  * @since 5.3
@@ -30,6 +33,8 @@ public interface ApplicationStartup {
 	/**
 	 * Default "no op" {@code ApplicationStartup} implementation.
 	 * <p>This variant is designed for minimal overhead and does not record data.
+	 * 默认 无作业 实现
+	 * 这个变体是为最小的开销设计的，而不是记录数据
 	 */
 	ApplicationStartup DEFAULT = new DefaultApplicationStartup();
 
